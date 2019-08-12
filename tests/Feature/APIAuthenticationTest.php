@@ -16,7 +16,6 @@ class APIAuthenticationTest extends TestCase
     {
         parent::setUp();
 
-        //$this->artisan('db:seed');
         $this->user = factory('App\User')->create();
     }
 
