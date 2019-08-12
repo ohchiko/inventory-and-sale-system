@@ -8,10 +8,13 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
 
 class User extends Authenticatable
 {
     use Notifiable, HasRoles, SoftDeletes;
+
+    protected $guard_name = 'api';
 
     /**
      * The attributes that are mass assignable.
@@ -42,6 +45,10 @@ class User extends Authenticatable
 
     public static function boot() {
         parent::boot();
+
+        static::creating(function ($user) {
+            $user->password = Hash::make($user->password);
+        });
 
         static::created(function ($user) {
             $user->api_token = Str::random(60);
