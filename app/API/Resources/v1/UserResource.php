@@ -14,10 +14,21 @@ class UserResource extends JsonResource
      */
     public function toArray($request)
     {
+        if ($request->query('includes')) {
+            $includes = explode(',', $request->query('includes'));
+
+            try {
+                $this->load($includes);
+            } catch (Exception $e) {
+                //
+            }
+        }
+
         return [
             'id'        => (int) $this->id,
             'name'      => (string) $this->name,
             'email'     => (string) $this->email,
+            'roles'     => RoleResource::collection($this->whenLoaded('roles')),
             'createdAt' => (string) $this->created_at->toDateTimeString(),
             'updatedAt' => (string) $this->updated_at->toDateTimeString(),
             'deletedAt' => (string) $this->deleted_at ?? $this->deleted_at->toDateTimeString()

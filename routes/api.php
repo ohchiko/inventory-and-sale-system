@@ -27,6 +27,14 @@ Route::namespace('v1')->group(function () {
             Route::get('{user}', 'UserController@show')->name('show');
             Route::put('{user}', 'UserController@update')->name('update');
             Route::delete('{user}', 'UserController@destroy')->name('destroy');
+
+            Route::prefix('roles')->name('roles.')->group(function () {
+
+                // start of roles prefix
+                Route::patch('{user}/assign', 'UserController@assignRole')->name('assign');
+                Route::patch('{user}/remove', 'UserController@removeRole')->name('remove');
+                // end of roles prefix
+            });
             // end of users prefix
         });
         // end of api:auth middleware
