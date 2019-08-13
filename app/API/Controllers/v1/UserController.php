@@ -70,4 +70,18 @@ class UserController extends Controller
             'message' => 'Resource deleted successfully.'
         ], 200);
     }
+
+    public function assignRole(R\AssignRole $request, User $user)
+    {
+        $user->assignRole($request->validated()['role']);
+
+        return new UserResource($user);
+    }
+
+    public function removeRole(R\RemoveRole $request, User $user)
+    {
+        $user->removeRole($request->validated()['role']);
+
+        return new UserResource($user);
+    }
 }

@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Spatie\Permission\Models\Role;
 
 class UserTest extends TestCase
 {
@@ -135,5 +136,45 @@ class UserTest extends TestCase
              ->json('delete', route('users.destroy', [ 'user' => $data->id ]))
              ->assertOk()
              ->assertSee('Resource deleted successfully.');
+    }
+
+    public function test_assign_role()
+    {
+        $this->artisan('db:seed');
+
+        $this->user->givePermissionTo('assign role');
+
+        $target = factory('App\User')->create();
+        $data = Role::first()->name;
+
+        $this->actingAs($this->user, 'api')
+             ->json('patch', route('users.roles.assign', [ 'user' => $target->id ]), [ 'role' => $data ])
+             ->assertOk()
+             ->assertJson([
+                 'data' => [
+                     'id' => $target->id,
+                     'roles' => [[ 'name' => $data ]]
+                 ]
+             ]);
+    }
+
+    public function test_remove_role()
+    {
+        $this->artisan('db:seed');
+
+        $this->user->givePermissionTo('remove role');
+
+        $target = factory('App\User')->create();
+        $data = Role::first()->name;
+        $target->assignRole($data);
+
+        $this->actingAs($this->user, 'api')
+             ->json('patch', route('users.roles.remove', [ 'user' => $target->id ]), [ 'role' => $data ])
+             ->assertOk()
+             ->assertJsonMissing([
+                 'data' => [
+                     'roles' => [[ 'name' => $data ]]
+                 ]
+             ]);
     }
 }

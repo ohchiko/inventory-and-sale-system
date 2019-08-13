@@ -18,7 +18,7 @@ class RolesAndPermissionsSeeder extends Seeder
 
         // create permissions
         $users = [
-            'register user', 'edit user', 'delete user', 'promote user', 'demote user',
+            'register user', 'edit user', 'delete user', 'assign role', 'remove role',
         ];
 
         $materials = [
