@@ -15,13 +15,10 @@ use Illuminate\Http\Request;
 
 Route::namespace('v1')->group(function () {
 
-    // start of v1 namespace
     Route::middleware('auth:api')->group(function () {
 
-        // start of api:auth middleware
         Route::prefix('users')->name('users.')->group(function () {
 
-            // start of users prefix
             Route::get('/', 'UserController@index')->name('index');
             Route::post('/', 'UserController@store')->name('store');
             Route::get('{user}', 'UserController@show')->name('show');
@@ -30,14 +27,18 @@ Route::namespace('v1')->group(function () {
 
             Route::prefix('roles')->name('roles.')->group(function () {
 
-                // start of roles prefix
                 Route::patch('{user}/assign', 'UserController@assignRole')->name('assign');
                 Route::patch('{user}/remove', 'UserController@removeRole')->name('remove');
-                // end of roles prefix
             });
-            // end of users prefix
         });
-        // end of api:auth middleware
+
+        Route::prefix('skus')->name('sku.')->group(function() {
+
+            Route::get('/', 'SKUController@index')->name('index');
+            Route::post('/', 'SKUController@store')->name('store');
+            Route::get('{sku}', 'SKUController@show')->name('show');
+            Route::put('{sku}', 'SKUController@update')->name('update');
+            Route::delete('{sku}', 'SKUController@destroy')->name('destroy');
+        });
     });
-    // end of v1 namespace
 });

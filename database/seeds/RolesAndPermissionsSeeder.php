@@ -21,8 +21,8 @@ class RolesAndPermissionsSeeder extends Seeder
             'register user', 'edit user', 'delete user', 'assign role', 'remove role',
         ];
 
-        $materials = [
-            'create material', 'edit material', 'delete material',
+        $components = [
+            'create component', 'edit component', 'delete component',
         ];
 
         $products = [
@@ -39,7 +39,7 @@ class RolesAndPermissionsSeeder extends Seeder
 
         foreach (array_merge(
             $users,
-            $materials,
+            $components,
             $products,
             $works,
             $purchases) as $permission) {
@@ -51,7 +51,7 @@ class RolesAndPermissionsSeeder extends Seeder
             ->givePermissionTo($users);
 
         Role::create([ 'name' => 'gudang', 'guard_name' => 'api' ])
-            ->givePermissionTo($materials);
+            ->givePermissionTo($components);
 
         Role::create([ 'name' => 'produksi', 'guard_name' => 'api' ])
             ->givePermissionTo($products);

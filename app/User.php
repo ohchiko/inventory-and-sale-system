@@ -56,4 +56,14 @@ class User extends Authenticatable
             $user->save();
         });
     }
+
+    public function skus()
+    {
+        return $this->hasMany('App\SKU');
+    }
+
+    public function components()
+    {
+        return $this->hasMany('App\Component');
+    }
 }
